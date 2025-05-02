@@ -1,13 +1,13 @@
 version: "3.9"
 services:
   mysql-db:
-    image: mysql:8.0
-    container_name: mysql-dev
+    image: mysql:latest
+    container_name: shooting-miner-db
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: myapp
-      MYSQL_USER: dev
-      MYSQL_PASSWORD: devpass
+      MYSQL_DATABASE: ShootingMinerDB
+      MYSQL_USER: api_server
+      MYSQL_PASSWORD: api_pass
     ports:
       - "3306:3306"
     volumes:
