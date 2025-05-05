@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class FrontController {
 
     @GetMapping(value = "/max-rank-tire") 
-    public MaxRankTireRecord ReadMaxRankTire(@RequestParam(value = "userID") String userID) {
+    public MaxRankTireRecord ReadMaxRankTire(@RequestParam String userID) {
         String maxRank = "1";
         String maxScore = "1000";
         String maxStage = "10";
@@ -22,7 +22,7 @@ public class FrontController {
     }
     
     @PostMapping(value = "/update-rank-tire")
-    public String UpdatRankTire(@RequestBody String json) {
+    public String UpdateRankTire(@RequestBody String json) {
 
         Integer num = 0;
         boolean condition = true;
@@ -34,5 +34,7 @@ public class FrontController {
         } while (condition);
  
         return Integer.toString(num);  
+
     }
 }
+
