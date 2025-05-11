@@ -16,15 +16,7 @@ public class FrontController {
     private JPAinterface jpainterface;
 
     @GetMapping(value = "/max-rank-tire") 
-    public MaxRankTireRecord ReadMaxRankTire(@RequestParam String userID) {
-        String maxRank = "1";
-        String maxScore = "1000";
-        String maxStage = "10";
-
-        MaxRankTireRecord returnMaxRankTireRecord = new MaxRankTireRecord(userID, maxRank, maxScore, maxStage);
-
-        return returnMaxRankTireRecord;
-    }
+    public void ReadMaxRankTire(@RequestParam String userID) {}
     
     @PostMapping(value = "/update-rank-tire")
     public String UpdateRankTire(@RequestBody String json) {
