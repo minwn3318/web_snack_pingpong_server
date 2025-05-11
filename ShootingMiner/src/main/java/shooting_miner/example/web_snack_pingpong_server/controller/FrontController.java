@@ -1,42 +1,75 @@
 package shooting_miner.example.web_snack_pingpong_server.controller;
 
+import org.springframework.web.bind.annotation.RequestMapping;
+
 import java.util.List;
 
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import shooting_miner.example.web_snack_pingpong_server.dao.impl.PlayRecordsDAOImpl;
+import shooting_miner.example.web_snack_pingpong_server.entity.PlayRecordsEntity;
+import shooting_miner.example.web_snack_pingpong_server.entity.PlayRecordsEntityPK;
 
 @RestController
 @RequestMapping("/shooting-miner")
 public class FrontController {
 
-    @PostMapping("/ranking")
-    public String addRanking(@RequestBody String json) {
-        return "Ranking added successfully" + json;
+    @Autowired
+    private PlayRecordsDAOImpl playRecordsDAO;
+
+    @PostMapping("/play-records")
+    public String setPlayRecords(@RequestBody String json) throws JsonMappingException, JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        PlayRecordsEntity entity = objectMapper.readValue(json, PlayRecordsEntity.class);
+        PlayRecordsEntityPK pk = entity.getPlayRecordpk();
+        PlayRecordsEntity result = playRecordsDAO.savePlayRecord(pk, entity);
+        String jsonResult = objectMapper.writeValueAsString(result);
+        return "Record successfully inserted into play-records. \n" + jsonResult;
     }
 
-    @GetMapping("/ranking/top-users") 
-    public String getTopUsers(@RequestParam("total") List<Integer> totals) {
-        return "Find top users";
+    @GetMapping("/play-records/top-users") 
+    public String getTopUsers() {
+        List<PlayRecordsEntity> topUsers = playRecordsDAO.getTopUser();
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            String jsonResult = objectMapper.writeValueAsString(topUsers);
+            return "Find Top Users. \n" +jsonResult;
+        } catch (JsonProcessingException e) {
+            return "Error: " + e.getMessage();
+        }
     }
     
-    @GetMapping("/ranking/{userId}/max-stage")
-    public String getUserMaxStage(@PathVariable("userId") String userid) {
-        return "find user max stage" + userid;
+    @GetMapping("/play-records/{userId}/max-stage")
+    public String getUserMaxStage(@PathVariable("userId") String userid) throws JsonProcessingException {
+        PlayRecordsEntity result = playRecordsDAO.getMaxStage(userid);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonResult =  objectMapper.writeValueAsString(result);
+        return "find user max stage. \n" + jsonResult;
     }
     
-    @GetMapping("/ranking/{userId}/max-score")
-    public String getUserMaxScore(@PathVariable("userId") String userid) {
-        return "find user max score" + userid;
+    @GetMapping("/play-records/{userId}/max-score")
+    public String getUserMaxScore(@PathVariable("userId") String userid)throws JsonProcessingException {
+        PlayRecordsEntity result = playRecordsDAO.getMaxScore(userid);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonResult =  objectMapper.writeValueAsString(result);
+        return "find user max score. \n" + jsonResult;
     }
 
-    @GetMapping("/ranking/{userId}/max-total")
-    public String getUserMaxTotal(@PathVariable("userId") String userid) {
-        return "find user max total" + userid;
+    @GetMapping("/play-records/{userId}/max-total")
+    public String getUserMaxTotal(@PathVariable("userId") String userid) throws JsonProcessingException {
+        PlayRecordsEntity result = playRecordsDAO.getMaxTotal(userid);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonResult =  objectMapper.writeValueAsString(result);
+        return "find user max total. \n" + jsonResult;
     }
 
     //@PostMapping(value = "/update-rank-tire")
@@ -54,7 +87,7 @@ public class FrontController {
     //            return "Error: game_id does not exist in UserIDs table.";
     //        }
 
-    //        return "Record successfully inserted into PlayRecords.";
+    //        return "Record successfully inserted into play-records.";
     //    } catch (Exception e) {
     //        e.printStackTrace();
     //        return "Error: " + e.getMessage();
