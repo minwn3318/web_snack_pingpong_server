@@ -17,16 +17,16 @@ import lombok.Setter;
 @Table(name = "play_records")
 public class PlayRecordsEntity {
     @Id
-    PlayRecordsEntityPK playRecordpk;
+    PlayRecordsEntityPK playRecordPK;
     Integer stage;
     Integer score;
 
     public PlayRecordsEntityPK getPlayRecordpk() {
-        return playRecordpk;
+        return playRecordPK;
     }
 
     public void setPlayRecordpk(PlayRecordsEntityPK playRecordpk) {
-        this.playRecordpk = playRecordpk;
+        this.playRecordPK = playRecordpk;
     }
 
     public Integer getStage() {

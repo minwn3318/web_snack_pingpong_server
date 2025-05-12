@@ -1,8 +1,8 @@
 package shooting_miner.example.web_snack_pingpong_server.dao.impl;
 
-import java.util.List;
+// import java.util.List;
 
-import org.springframework.data.domain.PageRequest;
+// import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import shooting_miner.example.web_snack_pingpong_server.dao.PlayRecordsDAO;
@@ -31,25 +31,25 @@ public class PlayRecordsDAOImpl implements PlayRecordsDAO{
         return entity;
     }
 
-    public List<PlayRecordsEntity> getTopUser(){
-        PageRequest pageable = PageRequest.of(0, 3);
-        List<PlayRecordsEntity> topUsers = playRecordsRepository.findTop3User(pageable);
-        return topUsers;
-    }
+    // public List<PlayRecordsEntity> getTopUser(){
+    //     PageRequest pageable = PageRequest.of(0, 3);
+    //     List<PlayRecordsEntity> topUsers = playRecordsRepository.findTop3User(pageable);
+    //     return topUsers;
+    // }
 
-    public PlayRecordsEntity getMaxStage(String gameId){
-        PlayRecordsEntity maxStage = playRecordsRepository.findMaxStageBygame_id(gameId);
-        return maxStage;
+    // public PlayRecordsEntity getMaxStage(String gameId){
+    //     PlayRecordsEntity maxStage = playRecordsRepository.findMaxStageBygame_id(gameId);
+    //     return maxStage;
 
-    }
+    // }
 
-    public PlayRecordsEntity getMaxScore(String gameId){
-        PlayRecordsEntity maxScore = playRecordsRepository.findMaxScoreBygame_id(gameId);
-        return maxScore;
-    }
+    // public PlayRecordsEntity getMaxScore(String gameId){
+    //     PlayRecordsEntity maxScore = playRecordsRepository.findMaxScoreBygame_id(gameId);
+    //     return maxScore;
+    // }
 
-    public PlayRecordsEntity getMaxTotal(String gameId){
-        PlayRecordsEntity maxTotal = playRecordsRepository.findMaxTotalBygame_id(gameId);
-        return maxTotal;
-    }
+    // public PlayRecordsEntity getMaxTotal(String gameId){
+    //     PlayRecordsEntity maxTotal = playRecordsRepository.findMaxTotalBygame_id(gameId);
+    //     return maxTotal;
+    // }
 }
