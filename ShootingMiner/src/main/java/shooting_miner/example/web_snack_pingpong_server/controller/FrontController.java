@@ -1,40 +1,77 @@
 package shooting_miner.example.web_snack_pingpong_server.controller;
 
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import shooting_miner.example.web_snack_pingpong_server.dao.impl.PlayRecordsDAOImpl;
+import shooting_miner.example.web_snack_pingpong_server.entity.PlayRecordsEntity;
+import shooting_miner.example.web_snack_pingpong_server.entity.PlayRecordsEntityPK;
+
 @RestController
-@ReguestMapping("/shooting-miner")
+@RequestMapping("/shooting-miner")
 public class FrontController {
 
-    @GetMapping(value = "/max-rank-tire") 
-    public MaxRankTireRecord ReadMaxRankTire(@RequestParam String userID) {
-        String maxRank = "1";
-        String maxScore = "1000";
-        String maxStage = "10";
+    @Autowired
+    private PlayRecordsDAOImpl playRecordsDAO;
 
-        MaxRankTireRecord returnMaxRankTireRecord = new MaxRankTireRecord(userID, maxRank, maxScore, maxStage);
+    @PostMapping("/play-records")
+    public String setPlayRecords(@RequestBody String json) throws JsonMappingException, JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new com.fasterxml.jackson.datatype.jsr310.JavaTimeModule()); // LocalDateTime 지원
+        PlayRecordsEntity entity = objectMapper.readValue(json, PlayRecordsEntity.class);
+        PlayRecordsEntityPK pk = entity.getPlayRecordPk();
+        PlayRecordsEntity result = playRecordsDAO.savePlayRecord(pk, entity);
+        String jsonResult = objectMapper.writeValueAsString(result);
+        return "Record successfully inserted into play-records. \n" + jsonResult;
+    }
 
-        return returnMaxRankTireRecord;
+    @GetMapping("/play-records/top-users") 
+    public String getTopUsers() {
+        List<PlayRecordsEntity> topUsers = playRecordsDAO.getTopUser();
+        ObjectMapper objectMapper = new ObjectMapper();
+        try {
+            String jsonResult = objectMapper.writeValueAsString(topUsers);
+            return "Find Top Users. \n" +jsonResult;
+        } catch (JsonProcessingException e) {
+            return "Error: " + e.getMessage();
+        }
     }
     
-    @PostMapping(value = "/update-rank-tire")
-    public String UpdateRankTire(@RequestBody String json) {
-
-        Integer num = 0;
-        boolean condition = true;
-        do {
-            for ( int i = 0; i < 10; i++) {
-                num += 1;
-            }
-            condition = false;
-        } while (condition);
- 
-        return Integer.toString(num);  
-
+    @GetMapping("/play-records/{userId}/max-stage")
+    public String getUserMaxStage(@PathVariable("userId") String userid) throws JsonProcessingException {
+        PlayRecordsEntity result = playRecordsDAO.getMaxStage(userid);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonResult =  objectMapper.writeValueAsString(result);
+        return "find user max stage. \n" + jsonResult;
     }
+    
+    @GetMapping("/play-records/{userId}/max-score")
+    public String getUserMaxScore(@PathVariable("userId") String userid)throws JsonProcessingException {
+        PlayRecordsEntity result = playRecordsDAO.getMaxScore(userid);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonResult =  objectMapper.writeValueAsString(result);
+        return "find user max score. \n" + jsonResult;
+    }
+
+    @GetMapping("/play-records/{userId}/max-total")
+    public String getUserMaxTotal(@PathVariable("userId") String userid) throws JsonProcessingException {
+        PlayRecordsEntity result = playRecordsDAO.getMaxTotal(userid);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String jsonResult =  objectMapper.writeValueAsString(result);
+        return "find user max total. \n" + jsonResult;
+    }
+
 }
 
