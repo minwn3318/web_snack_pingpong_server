@@ -1,6 +1,7 @@
 package shooting_miner.example.web_snack_pingpong_server.entity;
 
-import jakarta.persistence.Id;
+import jakarta.persistence.EmbeddedId;
+//import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -16,17 +17,17 @@ import lombok.Setter;
 @AllArgsConstructor
 @Table(name = "play_records")
 public class PlayRecordsEntity {
-    @Id
-    PlayRecordsEntityPK playRecordPK;
+    @EmbeddedId
+    PlayRecordsEntityPK playRecordPk;
     Integer stage;
     Integer score;
 
-    public PlayRecordsEntityPK getPlayRecordpk() {
-        return playRecordPK;
+    public PlayRecordsEntityPK getPlayRecordPk() {
+        return playRecordPk;
     }
 
-    public void setPlayRecordpk(PlayRecordsEntityPK playRecordpk) {
-        this.playRecordPK = playRecordpk;
+    public void setPlayRecordPk(PlayRecordsEntityPK playRecordpk) {
+        this.playRecordPk = playRecordpk;
     }
 
     public Integer getStage() {

@@ -1,19 +1,33 @@
 package shooting_miner.example.web_snack_pingpong_server.entity;
 
 import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 
 @Embeddable
 public class PlayRecordsEntityPK {
-    String game_id;
-    LocalDateTime play_datetime;
+    @Column(name = "game_id")
+    String gameId;
+    @Column(name = "play_datetime")
+    LocalDateTime playDatetime;
+
+    public PlayRecordsEntityPK() {}
+
+    public String getGame_id() {
+        return gameId;
+    }
+
+    // public LocalDateTime getPlay_datetime() {
+    //     return playDatetime;
+    // }
 
     public void setGame_id(String game_id) {
-        this.game_id = game_id;
+        this.gameId = game_id;
     }   
 
     public void setPlay_datetime(LocalDateTime play_datetime) {
-        this.play_datetime = play_datetime;
+        this.playDatetime = play_datetime;
     }
     
     @Override
