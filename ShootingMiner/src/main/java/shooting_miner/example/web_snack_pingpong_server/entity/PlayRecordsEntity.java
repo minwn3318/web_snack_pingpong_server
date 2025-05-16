@@ -26,8 +26,8 @@ public class PlayRecordsEntity {
         return playRecordPk;
     }
 
-    public void setPlayRecordPk(PlayRecordsEntityPK playRecordpk) {
-        this.playRecordPk = playRecordpk;
+    public void setPlayRecordPk(PlayRecordsEntityPK playRecordPk) {
+        this.playRecordPk = playRecordPk;
     }
 
     public Integer getStage() {
