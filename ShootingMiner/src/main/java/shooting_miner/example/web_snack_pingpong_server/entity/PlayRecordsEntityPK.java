@@ -1,6 +1,7 @@
 package shooting_miner.example.web_snack_pingpong_server.entity;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
@@ -14,29 +15,38 @@ public class PlayRecordsEntityPK {
 
     public PlayRecordsEntityPK() {}
 
-    public String getGame_id() {
+    public PlayRecordsEntityPK(String gameId, LocalDateTime playDatetime) {
+        this.gameId = gameId;
+        this.playDatetime = playDatetime;
+    }
+
+    public String getGameId() {
         return gameId;
     }
 
-    // public LocalDateTime getPlay_datetime() {
-    //     return playDatetime;
-    // }
-
-    public void setGame_id(String game_id) {
+    public void setGameId(String game_id) {
         this.gameId = game_id;
-    }   
+    }
+    
+    public LocalDateTime getPlayDatetime() {
+        return playDatetime;
+    }
 
-    public void setPlay_datetime(LocalDateTime play_datetime) {
+    public void setPlayDatetime(LocalDateTime play_datetime) {
         this.playDatetime = play_datetime;
     }
     
     @Override
-    public boolean equals(Object obj) {
-        return super.equals(obj);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PlayRecordsEntityPK)) return false;
+        PlayRecordsEntityPK that = (PlayRecordsEntityPK) o;
+        return Objects.equals(gameId, that.gameId)
+            && Objects.equals(playDatetime, that.playDatetime);
     }
 
     @Override
     public int hashCode() {
-        return super.hashCode();
+        return Objects.hash(gameId, playDatetime);
     }
 }

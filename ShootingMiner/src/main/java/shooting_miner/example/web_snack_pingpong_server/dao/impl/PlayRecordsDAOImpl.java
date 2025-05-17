@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import shooting_miner.example.web_snack_pingpong_server.dao.PlayRecordsDAO;
 import shooting_miner.example.web_snack_pingpong_server.entity.PlayRecordsEntity;
-import shooting_miner.example.web_snack_pingpong_server.entity.PlayRecordsEntityPK;
 import shooting_miner.example.web_snack_pingpong_server.repository.PlayRecordsRepository;
 
 @Service
@@ -20,15 +19,11 @@ public class PlayRecordsDAOImpl implements PlayRecordsDAO{
     }
 
     @Override
-    public PlayRecordsEntity savePlayRecord(PlayRecordsEntityPK playRecordPK, PlayRecordsEntity playRecord) {
-        PlayRecordsEntity entity = new PlayRecordsEntity();
-        entity.setPlayRecordPk(playRecordPK);
-        entity.setScore(playRecord.getScore());
-        entity.setStage(playRecord.getStage());
+    public PlayRecordsEntity savePlayRecord(PlayRecordsEntity playRecordEntity) {
 
-        playRecordsRepository.save(entity);
+        playRecordsRepository.save(playRecordEntity);
 
-        return entity;
+        return playRecordEntity;
     }
 
     public List<PlayRecordsEntity> getTopUser(){
