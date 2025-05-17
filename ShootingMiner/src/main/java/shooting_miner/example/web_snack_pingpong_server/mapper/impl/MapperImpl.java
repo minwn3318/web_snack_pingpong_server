@@ -7,7 +7,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import shooting_miner.example.web_snack_pingpong_server.dto.PlayRecordsDTO;
+import shooting_miner.example.web_snack_pingpong_server.dto.PlayRecordCreateDTO;
+import shooting_miner.example.web_snack_pingpong_server.dto.TopPlayerRecordDTO;
 import shooting_miner.example.web_snack_pingpong_server.entity.PlayRecordsEntity;
 import shooting_miner.example.web_snack_pingpong_server.entity.PlayRecordsEntityPK;   
 
@@ -15,7 +16,7 @@ import shooting_miner.example.web_snack_pingpong_server.entity.PlayRecordsEntity
 public class MapperImpl implements Mapper {
 
     @Override
-    public PlayRecordsEntity toEntity(PlayRecordsDTO dto) {
+    public PlayRecordsEntity toEntity(PlayRecordCreateDTO dto) {
         if (dto == null) {
             return null;
         }
@@ -29,12 +30,12 @@ public class MapperImpl implements Mapper {
     }
 
     @Override
-    public PlayRecordsDTO toDTO(PlayRecordsEntity entity) {
+    public PlayRecordCreateDTO toPlayRecordCreateDTO(PlayRecordsEntity entity) {
         if (entity == null) {
             return null;
         }
 
-        PlayRecordsDTO dto = new PlayRecordsDTO();
+        PlayRecordCreateDTO dto = new PlayRecordCreateDTO();
         dto.setGameId(entity.getPlayRecordPk().getGameId());
         dto.setPlayDatetime(entity.getPlayRecordPk().getPlayDatetime());
         dto.setScore(entity.getScore());
@@ -44,14 +45,29 @@ public class MapperImpl implements Mapper {
     }
 
     @Override
-    public List<PlayRecordsDTO> toDTOList(List<PlayRecordsEntity> entityList) {
+    public TopPlayerRecordDTO toTopPlayerRecordDTO(PlayRecordsEntity entity){
+        if (entity == null) {
+            return null;
+        }
+
+        TopPlayerRecordDTO dto = new TopPlayerRecordDTO();
+        dto.setGameId(entity.getPlayRecordPk().getGameId());
+        dto.setScore(entity.getScore());
+        dto.setStage(entity.getStage());
+
+        return dto;
+    }
+
+
+    @Override
+    public List<TopPlayerRecordDTO> toTopPlayerRecordDTOList(List<PlayRecordsEntity> entityList) {
         if (entityList == null) {
             return null;
         }
 
-        List<PlayRecordsDTO> dtoList = new ArrayList<>();
+        List<TopPlayerRecordDTO> dtoList = new ArrayList<>();
         for (PlayRecordsEntity entity : entityList) {
-            dtoList.add(toDTO(entity));
+            dtoList.add(toTopPlayerRecordDTO(entity));
         }
 
         return dtoList;
