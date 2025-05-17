@@ -1,5 +1,6 @@
 package shooting_miner.example.web_snack_pingpong_server.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.EmbeddedId;
 //import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -19,7 +20,11 @@ import lombok.Setter;
 public class PlayRecordsEntity {
     @EmbeddedId
     PlayRecordsEntityPK playRecordPk;
+
+    @Column(name = "stage")
     Integer stage;
+    
+    @Column(name = "score")
     Integer score;
 
     public PlayRecordsEntityPK getPlayRecordPk() {
