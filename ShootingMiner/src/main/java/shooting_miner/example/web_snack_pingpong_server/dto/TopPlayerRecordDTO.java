@@ -14,8 +14,8 @@ public class TopPlayerRecordDTO {
     private String gameId;
 
     @JsonProperty("stage")
-    private Integer stage;
+    private Integer topStage;
 
     @JsonProperty("score")
-    private Integer score;
+    private Integer topScore;
 }

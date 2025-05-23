@@ -52,8 +52,8 @@ public class MapperImpl implements Mapper {
 
         TopPlayerRecordDTO dto = new TopPlayerRecordDTO();
         dto.setGameId(entity.getPlayRecordPk().getGameId());
-        dto.setScore(entity.getScore());
-        dto.setStage(entity.getStage());
+        dto.setTopScore(entity.getScore());
+        dto.setTopStage(entity.getStage());
 
         return dto;
     }

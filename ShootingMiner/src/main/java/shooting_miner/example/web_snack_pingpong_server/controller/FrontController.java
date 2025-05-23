@@ -49,6 +49,7 @@ public class FrontController {
     
     @GetMapping("/play-records/serach/max-stage")
     public PlayerStageDTO getUserMaxStage(@RequestParam("userId") String userid) throws JsonProcessingException {
+        System.err.println("check : "+userid);
         PlayRecordsEntity entity = playRecordsDAO.getMaxStage(userid);
         return new PlayerStageDTO(entity.getStage());
     }

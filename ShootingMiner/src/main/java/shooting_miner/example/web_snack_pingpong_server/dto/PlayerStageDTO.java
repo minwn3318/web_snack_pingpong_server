@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PlayerStageDTO {
     @JsonProperty("stage")
-    private Integer stage;
+    private Integer maxStage;
 }

@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class PlayerScroeDTO {
     @JsonProperty("score")
-    private Integer score;    
+    private Integer maxScore;    
 }
