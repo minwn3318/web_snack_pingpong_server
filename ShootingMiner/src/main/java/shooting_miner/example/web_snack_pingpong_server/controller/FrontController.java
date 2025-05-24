@@ -46,6 +46,12 @@ public class FrontController {
         List<TopPlayerRecordDTO> resultDTO = mapperImpl.toTopPlayerRecordDTOList(topUsers);
         return resultDTO;
     }
+
+    @GetMapping("/hello") 
+    public String getHello() {
+        String result = "Hello, World!";
+        return result;
+    }
     
     @GetMapping("/play-records/serach/max-stage")
     public PlayerStageDTO getUserMaxStage(@RequestParam("userId") String userid) throws JsonProcessingException {
