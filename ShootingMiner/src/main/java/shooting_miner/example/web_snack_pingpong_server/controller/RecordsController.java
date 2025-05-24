@@ -20,17 +20,17 @@ import shooting_miner.example.web_snack_pingpong_server.dto.PlayerStageDTO;
 import shooting_miner.example.web_snack_pingpong_server.dto.PlayerTotalDTO;
 import shooting_miner.example.web_snack_pingpong_server.dto.TopPlayerRecordDTO;
 import shooting_miner.example.web_snack_pingpong_server.entity.PlayRecordsEntity;
-import shooting_miner.example.web_snack_pingpong_server.mapper.impl.MapperImpl;
+import shooting_miner.example.web_snack_pingpong_server.mapper.impl.RecordsMapperImpl;
 
 @RestController
 @RequestMapping("/shooting-miner")
-public class FrontController {
+public class RecordsController {
 
     @Autowired
     private PlayRecordsDAOImpl playRecordsDAO;
 
     @Autowired
-    private MapperImpl mapperImpl;
+    private RecordsMapperImpl mapperImpl;
 
     @PostMapping("/play-records/save")
     public PlayRecordCreateDTO setPlayRecords(@RequestBody PlayRecordCreateDTO newRecord) throws JsonProcessingException {
@@ -45,12 +45,6 @@ public class FrontController {
         List<PlayRecordsEntity> topUsers = playRecordsDAO.getTopUser();
         List<TopPlayerRecordDTO> resultDTO = mapperImpl.toTopPlayerRecordDTOList(topUsers);
         return resultDTO;
-    }
-
-    @GetMapping("/hello") 
-    public String getHello() {
-        String result = "Hello, World!";
-        return result;
     }
     
     @GetMapping("/play-records/serach/max-stage")

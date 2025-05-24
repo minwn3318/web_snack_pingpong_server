@@ -1,6 +1,6 @@
 package shooting_miner.example.web_snack_pingpong_server.mapper.impl;
 
-import shooting_miner.example.web_snack_pingpong_server.mapper.Mapper;
+import shooting_miner.example.web_snack_pingpong_server.mapper.RecordsMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import shooting_miner.example.web_snack_pingpong_server.entity.PlayRecordsEntity
 import shooting_miner.example.web_snack_pingpong_server.entity.PlayRecordsEntityPK;   
 
 @Service
-public class MapperImpl implements Mapper {
+public class RecordsMapperImpl implements RecordsMapper {
 
     @Override
     public PlayRecordsEntity toEntity(PlayRecordCreateDTO dto) {

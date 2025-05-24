@@ -8,7 +8,7 @@ import shooting_miner.example.web_snack_pingpong_server.dto.PlayRecordCreateDTO;
 import shooting_miner.example.web_snack_pingpong_server.dto.TopPlayerRecordDTO;
 import shooting_miner.example.web_snack_pingpong_server.entity.PlayRecordsEntity;
 
-public interface Mapper {
+public interface RecordsMapper {
 
     @Mapping(source="game_id", target="id.gameId")
     @Mapping(source="play_datetime", target="id.playDatetime")
