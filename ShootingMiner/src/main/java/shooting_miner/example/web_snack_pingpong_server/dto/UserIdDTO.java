@@ -11,5 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class UserIdDTO {
     @JsonProperty("game_id")
-    private String gameId;    
+    private String gameId;  
+    @JsonProperty("message")
+    private String message;
 }

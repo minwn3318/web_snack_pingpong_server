@@ -1,5 +1,6 @@
 package shooting_miner.example.web_snack_pingpong_server.dao.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import shooting_miner.example.web_snack_pingpong_server.dao.UserIdDAO;
 import shooting_miner.example.web_snack_pingpong_server.entity.UserIdEntity;
@@ -8,10 +9,8 @@ import shooting_miner.example.web_snack_pingpong_server.repository.UserIdsReposi
 @Service
 public class UserIdDAOImpl implements UserIdDAO{
 
+    @Autowired
     UserIdsRepository playRecordsRepository;
-    public UserIdDAOImpl(UserIdsRepository playRecordsRepository) {
-        this.playRecordsRepository = playRecordsRepository;
-    }
     
     @Override
     public UserIdEntity saveUserId(UserIdEntity userIdEntity) {
@@ -20,8 +19,9 @@ public class UserIdDAOImpl implements UserIdDAO{
     }
 
     @Override
-    public UserIdEntity loginUserId(String gameId) {
-        UserIdEntity findingID = playRecordsRepository.findUserIdByGameId(gameId);
+    public UserIdEntity checkUserId(UserIdEntity gameId) {
+        String gameIdString = gameId.getGameId();
+        UserIdEntity findingID = playRecordsRepository.findUserIdByGameId(gameIdString);
         return findingID;
     }
     

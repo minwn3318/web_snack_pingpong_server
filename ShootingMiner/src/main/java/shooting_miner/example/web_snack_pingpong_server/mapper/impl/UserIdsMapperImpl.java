@@ -22,14 +22,14 @@ public class UserIdsMapperImpl implements UserIdsMapper {
     }
 
     @Override
-    public UserIdDTO toUserIdDTO(UserIdEntity entity) {
+    public UserIdDTO toUserIdDTO(UserIdEntity entity, String message) {
         if (entity == null) {
             return null;
         }
 
         UserIdDTO dto = new UserIdDTO();
         dto.setGameId(entity.getGameId());
-
+        dto.setMessage(message);
         return dto;
     }
 }

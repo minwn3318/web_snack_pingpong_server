@@ -8,6 +8,9 @@ import java.util.List;
 import org.springframework.stereotype.Service;
 
 import shooting_miner.example.web_snack_pingpong_server.dto.PlayRecordCreateDTO;
+import shooting_miner.example.web_snack_pingpong_server.dto.PlayerScroeDTO;
+import shooting_miner.example.web_snack_pingpong_server.dto.PlayerStageDTO;
+import shooting_miner.example.web_snack_pingpong_server.dto.PlayerTotalDTO;
 import shooting_miner.example.web_snack_pingpong_server.dto.TopPlayerRecordDTO;
 import shooting_miner.example.web_snack_pingpong_server.entity.PlayRecordsEntity;
 import shooting_miner.example.web_snack_pingpong_server.entity.PlayRecordsEntityPK;   
@@ -38,6 +41,46 @@ public class RecordsMapperImpl implements RecordsMapper {
         PlayRecordCreateDTO dto = new PlayRecordCreateDTO();
         dto.setGameId(entity.getPlayRecordPk().getGameId());
         dto.setPlayDatetime(entity.getPlayRecordPk().getPlayDatetime());
+        dto.setScore(entity.getScore());
+        dto.setStage(entity.getStage());
+
+        return dto;
+    }
+
+    @Override
+    public PlayerScroeDTO toPlayerScroeDTO(PlayRecordsEntity entity){
+        if (entity == null) {
+            return null;
+        }
+
+        PlayerScroeDTO dto = new PlayerScroeDTO();
+        dto.setGameId(entity.getPlayRecordPk().getGameId());
+        dto.setMaxScore(entity.getScore());
+
+        return dto;
+    }
+
+    @Override
+    public PlayerStageDTO toPlayerStageDTO(PlayRecordsEntity entity){
+        if (entity == null) {
+            return null;
+        }
+
+        PlayerStageDTO dto = new PlayerStageDTO();
+        dto.setGameId(entity.getPlayRecordPk().getGameId());
+        dto.setMaxStage(entity.getStage());
+
+        return dto;
+    }
+
+    @Override
+    public PlayerTotalDTO toPlayerTotalDTO(PlayRecordsEntity entity){
+        if (entity == null) {
+            return null;
+        }
+
+        PlayerTotalDTO dto = new PlayerTotalDTO();
+        dto.setGameId(entity.getPlayRecordPk().getGameId());
         dto.setScore(entity.getScore());
         dto.setStage(entity.getStage());
 

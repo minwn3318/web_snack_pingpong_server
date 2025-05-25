@@ -12,4 +12,6 @@ import lombok.NoArgsConstructor;
 public class PlayerStageDTO {
     @JsonProperty("stage")
     private Integer maxStage;
+    @JsonProperty("game_id")
+    private String gameId;
 }

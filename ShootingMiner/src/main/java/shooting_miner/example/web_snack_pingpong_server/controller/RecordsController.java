@@ -1,11 +1,12 @@
 package shooting_miner.example.web_snack_pingpong_server.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -13,57 +14,80 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import shooting_miner.example.web_snack_pingpong_server.dao.impl.PlayRecordsDAOImpl;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import shooting_miner.example.web_snack_pingpong_server.dto.PlayRecordCreateDTO;
 import shooting_miner.example.web_snack_pingpong_server.dto.PlayerScroeDTO;
 import shooting_miner.example.web_snack_pingpong_server.dto.PlayerStageDTO;
 import shooting_miner.example.web_snack_pingpong_server.dto.PlayerTotalDTO;
 import shooting_miner.example.web_snack_pingpong_server.dto.TopPlayerRecordDTO;
-import shooting_miner.example.web_snack_pingpong_server.entity.PlayRecordsEntity;
-import shooting_miner.example.web_snack_pingpong_server.mapper.impl.RecordsMapperImpl;
+import shooting_miner.example.web_snack_pingpong_server.dto.UserIdDTO;
+import shooting_miner.example.web_snack_pingpong_server.service.AuthorizeService;
+import shooting_miner.example.web_snack_pingpong_server.service.RankRecordService;
 
 @RestController
 @RequestMapping("/shooting-miner")
 public class RecordsController {
 
     @Autowired
-    private PlayRecordsDAOImpl playRecordsDAO;
+    AuthorizeService authorizeService;
 
     @Autowired
-    private RecordsMapperImpl mapperImpl;
+    RankRecordService rankRecordService;
 
     @PostMapping("/play-records/save")
-    public PlayRecordCreateDTO setPlayRecords(@RequestBody PlayRecordCreateDTO newRecord) throws JsonProcessingException {
-        PlayRecordsEntity entity = mapperImpl.toEntity(newRecord);
-        entity = playRecordsDAO.savePlayRecord(entity);
-        PlayRecordCreateDTO resultDTO = mapperImpl.toPlayRecordCreateDTO(entity);
-        return resultDTO;
+    public ResponseEntity<PlayRecordCreateDTO> setPlayRecords(
+    @RequestBody PlayRecordCreateDTO newRecord, HttpServletRequest request ,HttpServletResponse response) throws JsonProcessingException {
+        UserIdDTO result = authorizeService.auth(request.getSession());
+        if ("NOT AUTHORIZED".equals(result.getGameId())) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(newRecord);
+        }
+        return ResponseEntity.status(HttpStatus.CREATED).body(rankRecordService.savePlayRecord(newRecord));
     }
 
     @GetMapping("/play-records/serach/top-users") 
-    public List<TopPlayerRecordDTO> getTopUsers() {
-        List<PlayRecordsEntity> topUsers = playRecordsDAO.getTopUser();
-        List<TopPlayerRecordDTO> resultDTO = mapperImpl.toTopPlayerRecordDTOList(topUsers);
-        return resultDTO;
+    public ResponseEntity<List<TopPlayerRecordDTO>> getTopUsers() {
+        return ResponseEntity.ok(rankRecordService.getTopUser());
     }
     
     @GetMapping("/play-records/serach/max-stage")
-    public PlayerStageDTO getUserMaxStage(@RequestParam("userId") String userid) throws JsonProcessingException {
-        System.err.println("check : "+userid);
-        PlayRecordsEntity entity = playRecordsDAO.getMaxStage(userid);
-        return new PlayerStageDTO(entity.getStage());
+    public ResponseEntity<PlayerStageDTO> getUserMaxStage(
+    HttpServletRequest request ,HttpServletResponse response) throws JsonProcessingException {
+        UserIdDTO result = authorizeService.auth(request.getSession());
+        if ("NOT AUTHORIZED".equals(result.getGameId())) {
+            PlayerStageDTO newRecord = new PlayerStageDTO();
+            newRecord.setMaxStage(null);
+            newRecord.setGameId(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(newRecord);
+        }
+        return ResponseEntity.ok(rankRecordService.getMaxStage(result));
     }
     
     @GetMapping("/play-records/serach/max-score")
-    public PlayerScroeDTO getUserMaxScore(@RequestParam("userId") String userid)throws JsonProcessingException {
-        PlayRecordsEntity entity = playRecordsDAO.getMaxScore(userid);
-        return new PlayerScroeDTO(entity.getScore());
+    public ResponseEntity<PlayerScroeDTO> getUserMaxScore(
+    HttpServletRequest request ,HttpServletResponse response)throws JsonProcessingException {
+        UserIdDTO result = authorizeService.auth(request.getSession());
+        if ("NOT AUTHORIZED".equals(result.getGameId())) {
+            PlayerScroeDTO newRecord = new PlayerScroeDTO();
+            newRecord.setMaxScore(null);
+            newRecord.setGameId(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(newRecord);
+        }
+        return ResponseEntity.ok(rankRecordService.getMaxScore(result));
     }
 
     @GetMapping("/play-records/serach/max-total")
-    public PlayerTotalDTO getUserMaxTotal(@RequestParam("userId") String userid) throws JsonProcessingException {
-        PlayRecordsEntity entity = playRecordsDAO.getMaxTotal(userid);
-        return new PlayerTotalDTO(entity.getStage(), entity.getScore());
+    public ResponseEntity<PlayerTotalDTO> getUserMaxTotal(
+    HttpServletRequest request ,HttpServletResponse response) throws JsonProcessingException {
+        UserIdDTO result = authorizeService.auth(request.getSession());
+        if ("NOT AUTHORIZED".equals(result.getGameId())) {
+            PlayerTotalDTO newRecord = new PlayerTotalDTO();
+            newRecord.setScore(null);
+            newRecord.setStage(null);
+            newRecord.setGameId(null);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(newRecord);
+        }
+        return ResponseEntity.ok(rankRecordService.getMaxTotal(result));
     }
 
 }

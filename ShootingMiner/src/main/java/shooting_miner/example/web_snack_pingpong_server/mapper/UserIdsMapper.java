@@ -11,5 +11,5 @@ public interface UserIdsMapper {
     UserIdEntity toUserIdEntity(UserIdDTO gameIdDTO);
 
     @Mapping(source="game_id", target="id.gameId")
-    UserIdDTO toUserIdDTO(UserIdEntity entity);
+    UserIdDTO toUserIdDTO(UserIdEntity entity, String message);
 }
