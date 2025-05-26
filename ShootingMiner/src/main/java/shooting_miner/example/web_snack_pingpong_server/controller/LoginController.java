@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import shooting_miner.example.web_snack_pingpong_server.dto.PlayRecordCreateDTO;
 import shooting_miner.example.web_snack_pingpong_server.dto.UserIdDTO;
 import shooting_miner.example.web_snack_pingpong_server.service.AuthorizeService;
 import shooting_miner.example.web_snack_pingpong_server.service.JoinAndLoginService;
+import shooting_miner.example.web_snack_pingpong_server.service.RankRecordService;
 
 @RestController
 @RequestMapping("/shooting-miner")
@@ -25,6 +27,9 @@ public class LoginController {
 
     @Autowired
     AuthorizeService authorizeService;
+
+    @Autowired
+    RankRecordService rankRecordService;
     
     @PostMapping("/userids/join")
     public ResponseEntity<UserIdDTO> join(@RequestBody UserIdDTO gameId,
@@ -33,6 +38,9 @@ public class LoginController {
         if ("EXISTS".equals(result.getGameId())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
+        PlayRecordCreateDTO newRecord = new PlayRecordCreateDTO();
+        newRecord.setGameId(result.getGameId());
+        rankRecordService.savePlayRecord(newRecord);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
@@ -40,7 +48,8 @@ public class LoginController {
     public ResponseEntity<UserIdDTO> login(@RequestBody UserIdDTO gameId, 
     HttpServletRequest request ,HttpServletResponse response) {
         UserIdDTO result = joinAndLoginService.login(gameId);
-        if ("NOT JOINED".equals(result.getGameId())) {
+        System.out.println("setPlayer: " + result.getGameId());
+        if ("NOT JOINED".equals(result.getMessage())) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
         }
         result = authorizeService.createCookie(request, response, result);

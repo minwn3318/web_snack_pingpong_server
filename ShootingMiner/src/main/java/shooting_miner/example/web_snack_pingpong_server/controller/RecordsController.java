@@ -39,7 +39,8 @@ public class RecordsController {
     public ResponseEntity<PlayRecordCreateDTO> setPlayRecords(
     @RequestBody PlayRecordCreateDTO newRecord, HttpServletRequest request ,HttpServletResponse response) throws JsonProcessingException {
         UserIdDTO result = authorizeService.auth(request.getSession());
-        if ("NOT AUTHORIZED".equals(result.getGameId())) {
+        System.out.println("setPlayer: " + result.getGameId());
+        if ("NOT AUTHORIZED".equals(result.getMessage())) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(newRecord);
         }
         return ResponseEntity.status(HttpStatus.CREATED).body(rankRecordService.savePlayRecord(newRecord));
@@ -54,7 +55,8 @@ public class RecordsController {
     public ResponseEntity<PlayerStageDTO> getUserMaxStage(
     HttpServletRequest request ,HttpServletResponse response) throws JsonProcessingException {
         UserIdDTO result = authorizeService.auth(request.getSession());
-        if ("NOT AUTHORIZED".equals(result.getGameId())) {
+        System.out.println("setPlayer: " + result.getGameId());
+        if ("NOT AUTHORIZED".equals(result.getMessage())) {
             PlayerStageDTO newRecord = new PlayerStageDTO();
             newRecord.setMaxStage(null);
             newRecord.setGameId(null);
@@ -67,7 +69,8 @@ public class RecordsController {
     public ResponseEntity<PlayerScroeDTO> getUserMaxScore(
     HttpServletRequest request ,HttpServletResponse response)throws JsonProcessingException {
         UserIdDTO result = authorizeService.auth(request.getSession());
-        if ("NOT AUTHORIZED".equals(result.getGameId())) {
+        System.out.println("setPlayer: " + result.getGameId());
+        if ("NOT AUTHORIZED".equals(result.getMessage())) {
             PlayerScroeDTO newRecord = new PlayerScroeDTO();
             newRecord.setMaxScore(null);
             newRecord.setGameId(null);
@@ -80,7 +83,8 @@ public class RecordsController {
     public ResponseEntity<PlayerTotalDTO> getUserMaxTotal(
     HttpServletRequest request ,HttpServletResponse response) throws JsonProcessingException {
         UserIdDTO result = authorizeService.auth(request.getSession());
-        if ("NOT AUTHORIZED".equals(result.getGameId())) {
+        System.out.println("setPlayer: " + result.getGameId());
+        if ("NOT AUTHORIZED".equals(result.getMessage())) {
             PlayerTotalDTO newRecord = new PlayerTotalDTO();
             newRecord.setScore(null);
             newRecord.setStage(null);

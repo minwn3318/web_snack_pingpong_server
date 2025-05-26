@@ -1,5 +1,7 @@
 package shooting_miner.example.web_snack_pingpong_server.service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +15,7 @@ import shooting_miner.example.web_snack_pingpong_server.dto.PlayerTotalDTO;
 import shooting_miner.example.web_snack_pingpong_server.dto.TopPlayerRecordDTO;
 import shooting_miner.example.web_snack_pingpong_server.dto.UserIdDTO;
 import shooting_miner.example.web_snack_pingpong_server.entity.PlayRecordsEntity;
+import shooting_miner.example.web_snack_pingpong_server.entity.PlayRecordsEntityPK;
 import shooting_miner.example.web_snack_pingpong_server.entity.UserIdEntity;
 import shooting_miner.example.web_snack_pingpong_server.mapper.RecordsMapper;
 import shooting_miner.example.web_snack_pingpong_server.mapper.UserIdsMapper;
@@ -29,6 +32,11 @@ public class RankRecordService {
     PlayRecordsDAOImpl playRecordsDAO;
 
     public PlayRecordCreateDTO savePlayRecord(PlayRecordCreateDTO playRecordDTO) {
+        if(playRecordDTO.getPlayDatetime() == null){
+            playRecordDTO.setPlayDatetime(LocalDateTime.now());
+            playRecordDTO.setStage(0);
+            playRecordDTO.setScore(0);
+        }
         PlayRecordsEntity playRecordEntity = recordsMapper.toEntity(playRecordDTO);
         playRecordEntity = playRecordsDAO.savePlayRecord(playRecordEntity);
         return recordsMapper.toPlayRecordCreateDTO(playRecordEntity);
@@ -54,6 +62,16 @@ public class RankRecordService {
 
     public List<TopPlayerRecordDTO> getTopUser(){
         List<PlayRecordsEntity> topUsers = playRecordsDAO.getTopUser();
+        if(topUsers == null || topUsers.isEmpty() || topUsers.size() < 3) {
+            topUsers = new ArrayList<>();
+            for(int i = 0; i < 3; i++) {
+                PlayRecordsEntity emptyRecord = new PlayRecordsEntity();
+                emptyRecord.setPlayRecordPk(new PlayRecordsEntityPK("No User", LocalDateTime.now()));
+                emptyRecord.setScore(0);
+                emptyRecord.setStage(0);
+                topUsers.add(emptyRecord);
+            }
+        }
         return recordsMapper.toTopPlayerRecordDTOList(topUsers);
     }
 }
