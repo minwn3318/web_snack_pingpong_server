@@ -12,4 +12,6 @@ import lombok.NoArgsConstructor;
 public class PlayerScroeDTO {
     @JsonProperty("score")
     private Integer maxScore;    
+    @JsonProperty("game_id")
+    private String gameId;
 }

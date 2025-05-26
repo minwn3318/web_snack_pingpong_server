@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class PlayerStageDTO {
-    @JsonProperty("stage")
-    private Integer maxStage;
+public class UserIdDTO {
     @JsonProperty("game_id")
-    private String gameId;
+    private String gameId;  
+    @JsonProperty("message")
+    private String message;
 }

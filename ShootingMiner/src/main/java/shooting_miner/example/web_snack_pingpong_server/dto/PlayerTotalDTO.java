@@ -14,4 +14,6 @@ public class PlayerTotalDTO {
     private Integer stage;
     @JsonProperty("score")
     private Integer score;
+    @JsonProperty("game_id")
+    private String gameId;
 }
