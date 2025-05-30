@@ -17,6 +17,7 @@ import shooting_miner.example.web_snack_pingpong_server.dto.UserIdDTO;
 import shooting_miner.example.web_snack_pingpong_server.service.AuthorizeService;
 import shooting_miner.example.web_snack_pingpong_server.service.JoinAndLoginService;
 import shooting_miner.example.web_snack_pingpong_server.service.RankRecordService;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @RestController
 @RequestMapping("/shooting-miner")
@@ -31,6 +32,13 @@ public class LoginController {
     @Autowired
     RankRecordService rankRecordService;
     
+    @GetMapping("/hello")
+    public String getMethodName() {
+        String name = "Hello, this is Shooting Miner Server!";
+        return name;
+    }
+    
+
     @PostMapping("/userids/join")
     public ResponseEntity<UserIdDTO> join(@RequestBody UserIdDTO gameId,
     HttpServletRequest request ,HttpServletResponse response) {

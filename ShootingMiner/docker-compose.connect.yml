@@ -16,7 +16,7 @@ services:
       retries: 3
 
   spring-boot-app:
-    image: shooting-miner-server-01:latest
+    image: shooting-miner-server-02:latest
     container_name: game-server
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://localhost:3306/ShootingMinerDB?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul
@@ -25,5 +25,5 @@ services:
     ports:
       - "8080:8080"
     depends_on:
-      db:
+      mysql-db:
         condition: service_healthy
