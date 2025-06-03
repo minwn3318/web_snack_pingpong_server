@@ -22,6 +22,10 @@ public class UserIdDAOImpl implements UserIdDAO{
     public UserIdEntity checkUserId(UserIdEntity gameId) {
         String gameIdString = gameId.getGameId();
         UserIdEntity findingID = playRecordsRepository.findUserIdByGameId(gameIdString);
+        if(findingID == null) {
+            findingID = new UserIdEntity();
+            findingID.setGameId(null);
+        }
         return findingID;
     }
     

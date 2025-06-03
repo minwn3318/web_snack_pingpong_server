@@ -19,7 +19,8 @@ public class JoinAndLoginService {
     public UserIdDTO join(UserIdDTO gameId) {
         UserIdEntity userIdEntity = userIdsMapper.toUserIdEntity(gameId);
         userIdEntity = userIdDAO.checkUserId(userIdEntity);
-        if (userIdEntity == null) {
+        if (userIdEntity.getGameId() == null) {
+            userIdEntity.setGameId(gameId.getGameId());
             userIdEntity = userIdDAO.saveUserId(userIdEntity);
             gameId = userIdsMapper.toUserIdDTO(userIdEntity, "JOINED");
         }
@@ -29,11 +30,11 @@ public class JoinAndLoginService {
         return gameId;
     }
 
-    public UserIdDTO login(UserIdDTO gameId) {
+    public UserIdDTO joinCheck(UserIdDTO gameId) {
         UserIdEntity userIdEntity = userIdsMapper.toUserIdEntity(gameId);
         userIdEntity = userIdDAO.checkUserId(userIdEntity);
-        if (userIdEntity != null) {
-            gameId = userIdsMapper.toUserIdDTO(userIdEntity, "LOGGED IN");
+        if (userIdEntity.getGameId() != null) {
+            gameId = userIdsMapper.toUserIdDTO(userIdEntity, "JOINED IN");
 
         } else {
             gameId.setMessage("NOT JOINED");

@@ -43,32 +43,41 @@ public class LoginController {
     public ResponseEntity<UserIdDTO> join(@RequestBody UserIdDTO gameId,
     HttpServletRequest request ,HttpServletResponse response) {
         UserIdDTO result = joinAndLoginService.join(gameId);
-        if ("EXISTS".equals(result.getGameId())) {
+        if ("EXISTS".equals(result.getMessage())) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
         }
         PlayRecordCreateDTO newRecord = new PlayRecordCreateDTO();
         newRecord.setGameId(result.getGameId());
-        rankRecordService.savePlayRecord(newRecord);
+        rankRecordService.serviceSavePlayRecord(newRecord, result);
         return ResponseEntity.status(HttpStatus.CREATED).body(result);
     }
 
     @PostMapping("/userids/login")
     public ResponseEntity<UserIdDTO> login(@RequestBody UserIdDTO gameId, 
     HttpServletRequest request ,HttpServletResponse response) {
-        UserIdDTO result = joinAndLoginService.login(gameId);
-        System.out.println("setPlayer: " + result.getGameId());
+        UserIdDTO result = joinAndLoginService.joinCheck(gameId);
         if ("NOT JOINED".equals(result.getMessage())) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
         }
-        result = authorizeService.createCookie(request, response, result);
-
+        result = authorizeService.checkAndCreateCookie(request, response, result);
+        if( "LOGGED IN".equals(result.getMessage())) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
+        }
         return ResponseEntity.ok(result);
     }
 
     @PostMapping("/userids/logout")
     public ResponseEntity<UserIdDTO> logout(HttpServletRequest request ,HttpServletResponse response) {
         HttpSession session = request.getSession(false);
-        UserIdDTO result = (UserIdDTO) session.getAttribute("userId");
+        if (session == null) {
+            UserIdDTO result = new UserIdDTO();
+            result.setMessage("NOT LOGGED IN");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
+        }
+        String userid = (String) session.getAttribute("userId");
+        UserIdDTO result = new UserIdDTO();
+        result.setGameId(userid);
+        
         result = joinAndLoginService.logout(result);
         result = authorizeService.deleteCookie(request, response, result);
         return ResponseEntity.ok(result);

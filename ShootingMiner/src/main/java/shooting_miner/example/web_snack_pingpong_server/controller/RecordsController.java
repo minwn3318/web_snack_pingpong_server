@@ -39,51 +39,47 @@ public class RecordsController {
     public ResponseEntity<PlayRecordCreateDTO> setPlayRecords(
     @RequestBody PlayRecordCreateDTO newRecord, HttpServletRequest request ,HttpServletResponse response) throws JsonProcessingException {
         UserIdDTO result = authorizeService.auth(request.getSession());
-        System.out.println("setPlayer: " + result.getGameId());
         if ("NOT AUTHORIZED".equals(result.getMessage())) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(newRecord);
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(rankRecordService.savePlayRecord(newRecord));
+        return ResponseEntity.status(HttpStatus.CREATED).body(rankRecordService.serviceSavePlayRecord(newRecord, result));
     }
 
     @GetMapping("/play-records/serach/top-users") 
     public ResponseEntity<List<TopPlayerRecordDTO>> getTopUsers() {
-        return ResponseEntity.ok(rankRecordService.getTopUser());
+        return ResponseEntity.ok(rankRecordService.serviceGetTopUser());
     }
     
     @GetMapping("/play-records/serach/max-stage")
     public ResponseEntity<PlayerStageDTO> getUserMaxStage(
     HttpServletRequest request ,HttpServletResponse response) throws JsonProcessingException {
         UserIdDTO result = authorizeService.auth(request.getSession());
-        System.out.println("setPlayer: " + result.getGameId());
         if ("NOT AUTHORIZED".equals(result.getMessage())) {
             PlayerStageDTO newRecord = new PlayerStageDTO();
             newRecord.setMaxStage(null);
             newRecord.setGameId(null);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(newRecord);
         }
-        return ResponseEntity.ok(rankRecordService.getMaxStage(result));
+        return ResponseEntity.ok(rankRecordService.serviceGetMaxStage(result));
     }
     
     @GetMapping("/play-records/serach/max-score")
     public ResponseEntity<PlayerScroeDTO> getUserMaxScore(
     HttpServletRequest request ,HttpServletResponse response)throws JsonProcessingException {
         UserIdDTO result = authorizeService.auth(request.getSession());
-        System.out.println("setPlayer: " + result.getGameId());
         if ("NOT AUTHORIZED".equals(result.getMessage())) {
             PlayerScroeDTO newRecord = new PlayerScroeDTO();
             newRecord.setMaxScore(null);
             newRecord.setGameId(null);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(newRecord);
         }
-        return ResponseEntity.ok(rankRecordService.getMaxScore(result));
+        return ResponseEntity.ok(rankRecordService.serviceGetMaxScore(result));
     }
 
     @GetMapping("/play-records/serach/max-total")
     public ResponseEntity<PlayerTotalDTO> getUserMaxTotal(
     HttpServletRequest request ,HttpServletResponse response) throws JsonProcessingException {
         UserIdDTO result = authorizeService.auth(request.getSession());
-        System.out.println("setPlayer: " + result.getGameId());
         if ("NOT AUTHORIZED".equals(result.getMessage())) {
             PlayerTotalDTO newRecord = new PlayerTotalDTO();
             newRecord.setScore(null);
@@ -91,7 +87,7 @@ public class RecordsController {
             newRecord.setGameId(null);
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(newRecord);
         }
-        return ResponseEntity.ok(rankRecordService.getMaxTotal(result));
+        return ResponseEntity.ok(rankRecordService.serviceGetMaxTotal(result));
     }
 
 }

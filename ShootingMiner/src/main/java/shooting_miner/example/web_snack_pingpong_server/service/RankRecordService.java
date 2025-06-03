@@ -31,36 +31,44 @@ public class RankRecordService {
     @Autowired
     PlayRecordsDAOImpl playRecordsDAO;
 
-    public PlayRecordCreateDTO savePlayRecord(PlayRecordCreateDTO playRecordDTO) {
+    public PlayRecordCreateDTO serviceSavePlayRecord(PlayRecordCreateDTO playRecordDTO, UserIdDTO userIdDTO) {
         if(playRecordDTO.getPlayDatetime() == null){
             playRecordDTO.setPlayDatetime(LocalDateTime.now());
             playRecordDTO.setStage(0);
             playRecordDTO.setScore(0);
         }
+        playRecordDTO.setGameId(userIdDTO.getGameId());
         PlayRecordsEntity playRecordEntity = recordsMapper.toEntity(playRecordDTO);
         playRecordEntity = playRecordsDAO.savePlayRecord(playRecordEntity);
-        return recordsMapper.toPlayRecordCreateDTO(playRecordEntity);
+        PlayRecordCreateDTO resultDTO = recordsMapper.toPlayRecordCreateDTO(playRecordEntity);
+        resultDTO.setGameId(null);
+        return resultDTO;
+    }
+    public PlayerScroeDTO serviceGetMaxScore(UserIdDTO userId){
+        UserIdEntity gameIdEntity = userIdsMapper.toUserIdEntity(userId);
+        PlayRecordsEntity entity = playRecordsDAO.getMaxScore(gameIdEntity);
+        PlayerScroeDTO resultDTO = recordsMapper.toPlayerScroeDTO(entity);
+        resultDTO.setGameId(null); // 게임 ID는 클라이언트에 노출하지 않음
+        return resultDTO;
     }
 
-    public PlayerScroeDTO getMaxScore(UserIdDTO userId){
+    public PlayerStageDTO serviceGetMaxStage(UserIdDTO userId){
         UserIdEntity gameIdEntity = userIdsMapper.toUserIdEntity(userId);
         PlayRecordsEntity entity = playRecordsDAO.getMaxStage(gameIdEntity);
-        return recordsMapper.toPlayerScroeDTO(entity);
+        PlayerStageDTO resultDTO = recordsMapper.toPlayerStageDTO(entity);
+        resultDTO.setGameId(null); // 게임 ID는 클라이언트에 노출하지 않음
+        return resultDTO;
     }
 
-    public PlayerStageDTO getMaxStage(UserIdDTO userId){
-        UserIdEntity gameIdEntity = userIdsMapper.toUserIdEntity(userId);
-        PlayRecordsEntity entity = playRecordsDAO.getMaxStage(gameIdEntity);
-        return recordsMapper.toPlayerStageDTO(entity);
-    }
-
-    public PlayerTotalDTO getMaxTotal(UserIdDTO userId){
+    public PlayerTotalDTO serviceGetMaxTotal(UserIdDTO userId){
         UserIdEntity gameIdEntity = userIdsMapper.toUserIdEntity(userId);
         PlayRecordsEntity entity = playRecordsDAO.getMaxTotal(gameIdEntity);
-        return recordsMapper.toPlayerTotalDTO(entity);
+        PlayerTotalDTO resultDTO = recordsMapper.toPlayerTotalDTO(entity);
+        resultDTO.setGameId(null); // 게임 ID는 클라이언트에 노출하지 않음
+        return resultDTO;
     }
 
-    public List<TopPlayerRecordDTO> getTopUser(){
+    public List<TopPlayerRecordDTO> serviceGetTopUser(){
         List<PlayRecordsEntity> topUsers = playRecordsDAO.getTopUser();
         if(topUsers == null || topUsers.isEmpty() || topUsers.size() < 3) {
             topUsers = new ArrayList<>();

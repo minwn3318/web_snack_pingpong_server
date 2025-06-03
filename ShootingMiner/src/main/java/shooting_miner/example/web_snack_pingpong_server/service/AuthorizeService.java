@@ -1,26 +1,33 @@
 package shooting_miner.example.web_snack_pingpong_server.service;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import shooting_miner.example.web_snack_pingpong_server.componet.SessionManagerService;
 import shooting_miner.example.web_snack_pingpong_server.dto.UserIdDTO;
 
 @Service
 public class AuthorizeService {
 
-    public UserIdDTO createCookie(
-        HttpServletRequest request ,HttpServletResponse response, UserIdDTO result) {
+    @Autowired
+    private SessionManagerService sessionManager;
     
+    public UserIdDTO checkAndCreateCookie(
+        HttpServletRequest request ,HttpServletResponse response, UserIdDTO result) {
+        String gameId = result.getGameId();
+        if(sessionManager.getSessionByGameId(gameId) == Boolean.TRUE) {
+            result.setMessage("LOGGED IN");
+            return result;  // 이미 존재하는 세션
+        }
         HttpSession session = request.getSession(true);
-        session.setAttribute("userId", result);
+        session.setAttribute("userId", result.getGameId());
+        sessionManager.registerSession(gameId, session);
 
-        Cookie jsid = new Cookie("JSESSIONID", session.getId());
-        jsid.setPath("/");
-        jsid.setMaxAge(7 * 24 * 60 * 60);  // 7일(초 단위)
-        response.addCookie(jsid);
+        result.setMessage("LOG IN");
 
         return result;
     }
@@ -29,17 +36,18 @@ public class AuthorizeService {
         HttpServletRequest request ,HttpServletResponse response, UserIdDTO result) {
         
         HttpSession session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();  // 세션 무효화
-        }
+        String sessiondUser = (String) session.getAttribute("userId");
+        sessionManager.removeSession(sessiondUser);
+        session.invalidate();  // 세션 무효화
 
-        // JSESSIONID 쿠키 삭제
         Cookie cookie = new Cookie("JSESSIONID", null);
-        cookie.setPath("/");         // 애플리케이션 전역에서 삭제
-        cookie.setHttpOnly(true);    // 보안 옵션 권장
-        cookie.setMaxAge(0);         // 즉시 만료
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(0); // 즉시 만료
         response.addCookie(cookie);
-        
+
+        result.setMessage("LOG OUT");
+
         return result;
     }
 
@@ -48,12 +56,19 @@ public class AuthorizeService {
         userId.setGameId(null);
         userId.setMessage("NOT AUTHORIZED");
         if (session == null) {
+            System.out.println("Session is null");
             return userId;
         }
-        userId = (UserIdDTO) session.getAttribute("userId");
-        if (userId == null) {
+        String sessiondUser = (String) session.getAttribute("userId");
+        if (sessiondUser == null) {
+            System.out.println("Session userId is null");
             return userId;
         }
+        if(sessionManager.getSessionByGameId(sessiondUser) == Boolean.FALSE) {
+            System.out.println("Session does not exist for userId: " + sessiondUser);
+            return userId;  // 세션이 존재하지 않음
+        }
+        userId.setGameId(sessiondUser);
         userId.setMessage("AUTHORIZED");
         return userId;
     }
