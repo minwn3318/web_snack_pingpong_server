@@ -44,7 +44,7 @@ public class LoginController {
     HttpServletRequest request ,HttpServletResponse response) {
         UserIdDTO result = joinAndLoginService.join(gameId);
         if ("EXISTS".equals(result.getMessage())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
+            return ResponseEntity.ok(result);
         }
         PlayRecordCreateDTO newRecord = new PlayRecordCreateDTO();
         newRecord.setGameId(result.getGameId());
@@ -57,11 +57,11 @@ public class LoginController {
     HttpServletRequest request ,HttpServletResponse response) {
         UserIdDTO result = joinAndLoginService.joinCheck(gameId);
         if ("NOT JOINED".equals(result.getMessage())) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(result);
+            return ResponseEntity.ok(result);
         }
         result = authorizeService.checkAndCreateCookie(request, response, result);
         if( "LOGGED IN".equals(result.getMessage())) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(result);
+            return ResponseEntity.ok(result);
         }
         return ResponseEntity.ok(result);
     }
@@ -72,7 +72,7 @@ public class LoginController {
         if (session == null) {
             UserIdDTO result = new UserIdDTO();
             result.setMessage("NOT LOGGED IN");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(result);
+            return ResponseEntity.ok(result);
         }
         String userid = (String) session.getAttribute("userId");
         UserIdDTO result = new UserIdDTO();

@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,9 +39,9 @@ public class RecordsController {
     @RequestBody PlayRecordCreateDTO newRecord, HttpServletRequest request ,HttpServletResponse response) throws JsonProcessingException {
         UserIdDTO result = authorizeService.auth(request.getSession());
         if ("NOT AUTHORIZED".equals(result.getMessage())) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(newRecord);
+            return ResponseEntity.ok(newRecord);
         }
-        return ResponseEntity.status(HttpStatus.CREATED).body(rankRecordService.serviceSavePlayRecord(newRecord, result));
+        return ResponseEntity.ok(rankRecordService.serviceSavePlayRecord(newRecord, result));
     }
 
     @GetMapping("/play-records/serach/top-users") 
@@ -58,7 +57,7 @@ public class RecordsController {
             PlayerStageDTO newRecord = new PlayerStageDTO();
             newRecord.setMaxStage(null);
             newRecord.setGameId(null);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(newRecord);
+            return ResponseEntity.ok(newRecord);
         }
         return ResponseEntity.ok(rankRecordService.serviceGetMaxStage(result));
     }
@@ -71,7 +70,7 @@ public class RecordsController {
             PlayerScroeDTO newRecord = new PlayerScroeDTO();
             newRecord.setMaxScore(null);
             newRecord.setGameId(null);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(newRecord);
+            return ResponseEntity.ok(newRecord);
         }
         return ResponseEntity.ok(rankRecordService.serviceGetMaxScore(result));
     }
@@ -85,7 +84,7 @@ public class RecordsController {
             newRecord.setScore(null);
             newRecord.setStage(null);
             newRecord.setGameId(null);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(newRecord);
+            return ResponseEntity.ok(newRecord);
         }
         return ResponseEntity.ok(rankRecordService.serviceGetMaxTotal(result));
     }

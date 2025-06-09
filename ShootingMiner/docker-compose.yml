@@ -1,7 +1,7 @@
 version: "2.3"
 services:
   mysql-db:
-    image: shooting-miner-db-01:latest
+    image: jmj1380/shootingminer-db:latest
     container_name: game-db-02
     environment:
       MYSQL_ROOT_PASSWORD: dnjfska@33
@@ -11,12 +11,12 @@ services:
       - "3306:3306"
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
+      interval: 60s
+      timeout: 120s
+      retries: 5
 
   spring-boot-app:
-    image: shooting-server-03:latest
+    image: jmj1380/shootingminer-server:holly
     container_name: game-server-02
     environment:
       SPRING_DATASOURCE_URL: jdbc:mysql://mysql-db:3306/ShootingMinerDB?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=Asia/Seoul

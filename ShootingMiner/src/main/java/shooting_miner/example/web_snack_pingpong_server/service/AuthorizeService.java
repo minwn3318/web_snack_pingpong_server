@@ -56,16 +56,13 @@ public class AuthorizeService {
         userId.setGameId(null);
         userId.setMessage("NOT AUTHORIZED");
         if (session == null) {
-            System.out.println("Session is null");
             return userId;
         }
         String sessiondUser = (String) session.getAttribute("userId");
         if (sessiondUser == null) {
-            System.out.println("Session userId is null");
             return userId;
         }
         if(sessionManager.getSessionByGameId(sessiondUser) == Boolean.FALSE) {
-            System.out.println("Session does not exist for userId: " + sessiondUser);
             return userId;  // 세션이 존재하지 않음
         }
         userId.setGameId(sessiondUser);
