@@ -33,13 +33,12 @@ https://hub.docker.com/repository/docker/jmj1380/shootingminer-server/general
 > 데이터베이스 이미지 :    
 https://hub.docker.com/repository/docker/jmj1380/shootingminer-db/general   
 <br>
- 
-1. 프로젝트에 주어진 ShootingMiner/docker-compose.yml 파일을 사용하여 서버컨테이너와 데이터베이스 컨테이너를 생성 후 네트워크 연결하여 서버를 시작합니다
+
+- 프로젝트에 주어진 ShootingMiner/docker-compose.yml 파일을 사용하여 서버컨테이너와 데이터베이스 컨테이너를 생성 후 네트워크 연결하여 서버를 시작합니다
 ```
 docker-compose up -d
 ```
 
-3. 
 <br>   
 
 ## 5. 시스템 아키텍처 구조
@@ -49,7 +48,9 @@ docker-compose up -d
 
 서버는 도커기반 환경에서 구축되었습니다.
 
- 
+![Archtecter](https://github.com/user-attachments/assets/e275d02b-e743-4dcc-9b0e-d33202c339f7)   
+<br>   
+
 ## 6. 주요 API 명세 
 ### Rank API 목록
 | 기능              | Method     | Endpoint                        | 설명                            |
